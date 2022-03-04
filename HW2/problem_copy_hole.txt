@@ -1,0 +1,12 @@
+Write a C/C++ program that consist of several modules:
+- A class/struct defining the "Complex" number (in a separate source and header files) supporting basic operations (+, -, multiply by constant, absolute value)
+- If implementing in C++ using classes use methods and operator overloads, if using plain c syntax, just define functions that do the operations
+- Implement a sorting algorithm (any) that will sort an array of complex numbers by their absolute value
+- A "main.cpp" or "main.c" file demonstrating your sorting algorithm in action (array/list of complex numbers ordered by absolute value)
+
+Then, a Makefile should be written to build this modules together (a target per each module).
+Makefile should support:
+- Target "all" and "clean"
+- Compiler, Compiler flags should be given by Makefile variables
+
+Submissions should be placed into a Github (or Bitbucket) repository. All other submissions will not be considered.
