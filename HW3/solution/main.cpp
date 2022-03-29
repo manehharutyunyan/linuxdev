@@ -114,21 +114,22 @@ int main()
             std::string inPath = fileDir + "/in.std";
             std::string errPath = fileDir + "/err.std";
 
+            // reopen streams with different files
             freopen(outPath.c_str(), "w", stdout);
             freopen(inPath.c_str(), "r", stdin);
             freopen(errPath.c_str(), "w+", stderr);
             
             // execute given program
             int status_code = execv(argv[0], (char **)argv);
-
-            std::cout << "execv " << status_code << std::endl;
-
+            
+            // if command does't executed
             if (status_code == -1)
             {
                 printf("Process did not terminate correctly\n");
                 exit(1);
             }
 
+            // closed the files associated with the streams
             fclose(stdout);
             fclose(stdin);
             fclose(stderr);
