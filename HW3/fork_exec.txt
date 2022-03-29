@@ -1,0 +1,13 @@
+Write a program that will act as a shell:
+
+Program infinitely waits for a command (same way shell does)
+A string passed as input every time is interpreted as a command with arguments
+A command can be either by name or by path (in case of name, lookup path of program in using $PATH env variable)
+Once command is clear, shell should execute given command in a separate process and wait for it's completion
+The child process, while exucuting should redirect its std streams this way
+The stdout of child should be redirected to path /opt/silentshell/{PID}/out.std
+The stderr of child should be redirected to path /opt/silentshell/{PID}/err.std -- The stdin of child should be reading input from path /opt/silentshell/{PID}/in.std
+Other requirements:
+
+Write a proper Makefile to build the program.
+Error handling, code styling, comments are very important and will be taken into consideration.
