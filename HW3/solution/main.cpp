@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include <cstring>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -56,10 +57,10 @@ int main()
 
         // read command from shell
         std::string command;
-        // std::getline(std::cin, command);
+        // command = "echo a b";
+        std::getline(std::cin, command);
 
-        // curr commaand
-        command = "echo a b";
+        // split command
         std::vector<std::string> commandParts = split(command, ' ');
 
         // the program to be executed
@@ -79,6 +80,7 @@ int main()
         // add sentinel
         argv[commandParts.size()] = NULL;
 
+        // add command arguments to array
         for (int i = 1; i < commandParts.size(); ++i)
         {
             argv[i] = commandParts[i].c_str();
@@ -115,9 +117,11 @@ int main()
             freopen(outPath.c_str(), "w", stdout);
             freopen(inPath.c_str(), "r", stdin);
             freopen(errPath.c_str(), "w+", stderr);
-
+            
             // execute given program
             int status_code = execv(argv[0], (char **)argv);
+
+            std::cout << "execv " << status_code << std::endl;
 
             if (status_code == -1)
             {
@@ -141,8 +145,5 @@ int main()
 
         exit(0);
     }
-
-    std::cout << "Completing process " << getpid() << std::endl;
-
     return 0;
 }
