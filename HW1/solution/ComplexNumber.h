@@ -1,3 +1,6 @@
+#ifndef COMPLEX_NUMBER_H
+#define COMPLEX_NUMBER_H
+
 // the class of complex numbers
 class ComplexNumber
 {
@@ -36,3 +39,5 @@ class ComplexNumber
         // operator * overload
         friend ComplexNumber operator*(const ComplexNumber& c, double s);
 };
+
+#endif

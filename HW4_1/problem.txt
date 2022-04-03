@@ -1,0 +1,27 @@
+thread_pool
+
+The problem: Implement a module in C++ called "ParallelScheduler" which has only one method: run( void (*start_routine) (void ), void).
+
+Behavior:
+
+A programmer, who uses the the module, creates and instance of ParallelScheduler. (ParallelScheduler* scheduler = new ParallelScheduler(32)).
+A programmer wants to run functions f1, f2, f3 ... f100, he should just call "scheduler->run(f1, arg)" and nothing else.
+Once module gets free threads, it will execute f{i} in parallel.
+The module should be designed to:
+
+The "run" method accepts two arguments: a pointer to a function that gets void* and returns void, and the void* argument to pass to routing (simmilar to pthread_create, but not exactly the same)
+Have an initial capacity of parallel tasks it can execute, assuming N.
+Module should create and keep N threads inside, not more and not less.
+All threads should be in a "sleeping" mode.
+The module should queue all the functions, instead of running them directly.
+If M > N functions are required to run, only N can run in parallel, rest should wait while a thread completes its previous task and can run a new one.
+Requirements:
+
+Do not use C++ primitives like std::mutex or std::cond_var, instead use pthread_mutex_t and pthread_cond_t.
+Do not use C++ threads (std::thread) instead use pthread_t.
+Other than threads and sync primitives, use whatever you want from C++ libraries.
+Hint:
+
+Try to think of it as a producer/consumer task.
+Think of using conditional variables.
+Feel free to use std library whatever is needed (containers like std::vector or std::queue or other).

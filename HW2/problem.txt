@@ -1,3 +1,5 @@
+problem_copy_hole
+
 Write a C/C++ program that consist of several modules:
 - A class/struct defining the "Complex" number (in a separate source and header files) supporting basic operations (+, -, multiply by constant, absolute value)
 - If implementing in C++ using classes use methods and operator overloads, if using plain c syntax, just define functions that do the operations
