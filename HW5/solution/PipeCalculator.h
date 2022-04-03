@@ -12,14 +12,9 @@ private:
     int* array;
     pid_t *parallelWorkers;
 
-    //int (*parentChildFileDes)[2];
-    //int (*childParentFileDes)[2];
-    //int parentToChildFd[2];
-    //int childToParentFd[2];
-
 public:
     PipeCalculator(int arraySize);
-    //~PipeCalculator();
+    ~PipeCalculator();
     int sum(int parallelWorkersCount);
 };
 

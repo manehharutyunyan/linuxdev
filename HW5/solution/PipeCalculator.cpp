@@ -143,7 +143,12 @@ int PipeCalculator::sum(int workersCount)
 
         // wait for all workers to finish
     }
-    while (wait(NULL) > 0)
-        ;
+    while (wait(NULL) > 0);
     return totalSum;
+}
+
+PipeCalculator::~PipeCalculator()
+{
+    delete[] this-> array;
+    delete[] this-> parallelWorkers;
 }
