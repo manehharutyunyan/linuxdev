@@ -28,9 +28,9 @@ void ParallelMatrix::RandomInit()
     {
         for (int j = 0; j < this->weight; ++j)
         {
-            std::cout << this->matrix[i][j] << " ";
+            //std::cout << this->matrix[i][j] << " ";
         }
-        std::cout << std::endl;
+        //std::cout << std::endl;
     }
 }
 
@@ -58,7 +58,6 @@ struct thread_args
     ParallelMatrix *instance;
     int rowStartIndex;
     int rowEndIndex;
-    //bool reachedTheEnd;
 };
 
 // calculate the sum of cells in submatrix
@@ -80,27 +79,34 @@ void *ParallelMatrix::ThreadFunction(void *arg)
         }
     }
 
+    // securely add current sum to total sum
+    instance->AddToParallelSum(currSum);
+
+    return NULL;
+}
+
+// securely add current sum to total sum
+void ParallelMatrix::AddToParallelSum(int sum)
+{
     // lock mutex
-    pthread_mutex_lock(&instance->sumMutex);
+    pthread_mutex_lock(&this->sumMutex);
 
     // securely add curr sum to main parallelSum
-    instance->parallelSum += currSum;
-    std::cout << "instance->parallelSum ****************************** = " << instance->parallelSum << std::endl;
+    this->parallelSum += sum;
 
     // unlock mutex
-    pthread_mutex_unlock(&instance->sumMutex);
-    
-    return NULL;
+    pthread_mutex_unlock(&this->sumMutex);
 }
 
 // parallelly calculates the sum of matrix elements
 int ParallelMatrix::SumParallel(int threadsCount)
 {
+    this->parallelSum = 0;
+
     // logic doesn't work when threadsCount < this->height
     if (threadsCount >= this->height)
     {
         threadsCount = this->height;
-        //std::cout << "hi from enddddddddddddddddddddddddddddddddddd" << std::endl;
     }
 
     // int sum = 0;
@@ -111,32 +117,22 @@ int ParallelMatrix::SumParallel(int threadsCount)
     // get the count of submatrix rows
     int submatrixRowsCount = ceil((float)this->height / threadsCount);
 
-    std::cout << "submatrixRowsCount = " << submatrixRowsCount << std::endl;
-
-    bool reachedTheEnd = false;
     // for each iteration create an thread
     for (int i = 0; i < threadsCount; ++i)
     {
         // get end index of submatrix
         int endIndex = i * submatrixRowsCount + submatrixRowsCount;
 
-        // if we have reach to the end get the last index
-        if (endIndex + submatrixRowsCount >= this->height && !reachedTheEnd)
+        if (i == threadsCount - 1)
         {
             endIndex = this->height;
-            reachedTheEnd = true;
         }
-
-        //std::cout << "endIndex = " << endIndex << std::endl;
 
         // initialize thread struct
         thread_args *args = new (thread_args);
         args->rowStartIndex = i * submatrixRowsCount;
         args->rowEndIndex = endIndex;
         args->instance = this;
-
-        std::cout << "args->rowStartIndex = " << args->rowStartIndex << std::endl;
-        std::cout << "args->rowEndIndex = " << args->rowEndIndex << std::endl;
 
         // create thread to run threadFunction routine
         int threadCreated = pthread_create(&threads[i], NULL, ThreadFunction, args);
@@ -147,16 +143,7 @@ int ParallelMatrix::SumParallel(int threadsCount)
             std::cout << "Could not create new thread" << std::endl;
             return threadCreated;
         }
-
-        if(reachedTheEnd)
-        {
-            break;
-        }
     }
-
-    //std::cout << "end of for loop" << std::endl;
-
-    std::cout << "parallelSum = " << this->parallelSum << std::endl;
 
     // wait for all threads
     for (int i = 0; i < threadsCount; i++)

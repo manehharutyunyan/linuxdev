@@ -35,6 +35,9 @@ public:
     // parallely calculates sum of all cells in the matrix using threads
     int SumParallel(int threadsCount);
 
+    // securely add 'sum' to total 'parallelSum'
+    void AddToParallelSum(int sum);
+
     // parallel sum thread function
     static void* ThreadFunction(void *arg);
 };
