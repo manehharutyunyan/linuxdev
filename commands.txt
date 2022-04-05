@@ -1,3 +1,7 @@
+cd /mnt/c/Users/Maneh.Harutyunyan/MyProjects/linuxdev
+g++ HW0.c
+./a.out
+
 #include "ParallelMatrix.h"
 #include <stdlib.h>
 #include <iostream>
@@ -14,7 +18,6 @@ ParallelMatrix::ParallelMatrix(int height, int weight)
 void ParallelMatrix::RandomInit()
 {
     this->matrix = new int *[this->height];
-    pthread_mutex_init(&this->sumMutex,NULL);
 
     for (int i = 0; i < this->height; ++i)
     {
@@ -84,7 +87,10 @@ void *ParallelMatrix::ThreadFunction(void *arg)
 
     for (int i = args->rowStartIndex; i < args->rowEndIndex; ++i)
     {
-        currSum += instance->flattenMatrix[i];
+        for (int j = 0; j < instance->weight; ++j)
+        {
+            currSum += instance->matrix[i][j];
+        }
     }
 
     // lock mutex
@@ -102,33 +108,36 @@ void *ParallelMatrix::ThreadFunction(void *arg)
 // parallelly calculates the sum of matrix elements
 int ParallelMatrix::SumParallel(int threadsCount)
 {
+    this->parallelSum = 0;
+
+    // logic doesn't work when threadsCount < this->height
+    if (threadsCount >= this->height)
+    {
+        threadsCount = this->height;
+    }
+
     // int sum = 0;
     this->parallelSum = 0;
 
     pthread_t threads[threadsCount];
 
-    // the size of flatten matrix
-    int flattenMatrixSize = this->height*this->weight;
-
     // get the count of submatrix rows
-    //int submatrixRowsCount = ceil((float)this->height / threadsCount);
-    int capacity = ceil((float)flattenMatrixSize/threadsCount);
+    int submatrixRowsCount = ceil((float)this->height / threadsCount);
 
     // for each iteration create an thread
     for (int i = 0; i < threadsCount; ++i)
     {
         // get end index of submatrix
-        int endIndex = i * capacity + capacity;
+        int endIndex = i * submatrixRowsCount + submatrixRowsCount;
 
-        // reach the end
         if (i == threadsCount - 1)
         {
-            endIndex = flattenMatrixSize;
+            endIndex = this->height;
         }
 
         // initialize thread struct
         thread_args *args = new (thread_args);
-        args->rowStartIndex = i * capacity;
+        args->rowStartIndex = i * submatrixRowsCount;
         args->rowEndIndex = endIndex;
         args->instance = this;
 

@@ -140,9 +140,8 @@ int PipeCalculator::sum(int workersCount)
 
             exit(0);
         }
-
-        // wait for all workers to finish
     }
+    // wait for all workers to finish
     while (wait(NULL) > 0);
     return totalSum;
 }

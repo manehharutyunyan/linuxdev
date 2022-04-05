@@ -1,7 +1,7 @@
 all: ParallelMatrix
 
 ParallelMatrix: main.o ParallelMatrix.o
-	g++ -pthread main.o ParallelMatrix.o -o ParallelMatrix
+	g++ -g -Wall -pthread main.o ParallelMatrix.o -o ParallelMatrix
 	
 main.o: main.cpp ParallelMatrix.h
 	g++ -c main.cpp -o main.o

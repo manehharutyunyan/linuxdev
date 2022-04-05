@@ -4,7 +4,7 @@
 
 int main()
 {
-    ParallelMatrix matrix = ParallelMatrix(10000, 10000);
+    ParallelMatrix matrix = ParallelMatrix(10, 10);
     matrix.RandomInit();
 
     // start time of sequential sum
@@ -20,7 +20,7 @@ int main()
     auto startedParallelTime = std::chrono::high_resolution_clock::now();
 
     // get the parallelly counted sum of matrix
-    std::cout << "parallel sum: " << matrix.SumParallel(20) << std::endl;
+    std::cout << "parallel sum: " << matrix.SumParallel(2) << std::endl;
 
     // end time of parallel sum
     auto endParallelTime = std::chrono::high_resolution_clock::now();

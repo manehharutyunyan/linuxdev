@@ -10,6 +10,9 @@ private:
     // the matrix
     int **matrix;
 
+    // the flatten matrix
+    int *flattenMatrix;
+
     // the mutex for manageing parallel sum
     pthread_mutex_t sumMutex;
 
@@ -28,6 +31,9 @@ public:
 
     // initializes the matrix with random numbers
     void RandomInit();
+
+    // make matrix flatten
+    void FlattenMatrix();
 
     // calculates sum of all cells in the matrix
     int Sum();
