@@ -1,0 +1,13 @@
+Signal handling
+
+Write a program that runs an infinite loop. Inside the loop put some delays (sleeps) for some seconds (ex: 10).
+Register a signal handler for the signal SIGUSR1 which interrupts the execution and prints the following information:
+- The PID of the sender
+- The UID and the User Name of the sender
+- The current values of following registers EIP, EAX, EBX (more if you wish)
+
+Hint: Look at third argument of signal handler.
+
+Requirement: Write a Makefile for the program. Keep code simple and clean.
+
+Pay attention to coding style and comments. 
